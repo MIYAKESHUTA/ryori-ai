@@ -4,63 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>料理アキネーター🍳</title>
-  <style>
-    body { font-family: 'Segoe UI', sans-serif; background: #fffaf0; padding: 2rem; text-align: center; }
-    h1 { color: #d2691e; }
-    #question { font-size: 1.2rem; margin: 2rem 0; }
-    button { padding: 1rem 2rem; margin: 0.5rem; font-size: 1rem; background: #ffa07a; border: none; border-radius: 8px; color: white; cursor: pointer; }
-    button:hover { background: #ff7f50; }
-    #result { margin-top: 2rem; background: #fff3e0; padding: 1rem; border-radius: 10px; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>料理アキネーター🍽️</h1>
-  <div id="question">はじめましょうか？</div>
-  <div>
-    <button onclick="answer('はい')">はい</button>
-    <button onclick="answer('いいえ')">いいえ</button>
+  <h1>🍽️ 料理アキネーター</h1>
+  <div id="question"></div>
+  <div id="buttons">
+    <button onclick="handleAnswer(true)">はい</button>
+    <button onclick="handleAnswer(false)">いいえ</button>
   </div>
-  <div id="result"></div>
+  <div id="result" style="display:none;"></div>
 
-  <script>
-    const apiUrl = "https://あなたの-render-url.onrender.com/chat"; // ← ここにRenderのURLを設定
-    let messages = [
-      {
-        role: "system",
-        content: `
-あなたは料理アキネーターです。
-ユーザーに「はい」「いいえ」で答えられる質問を順に行い、最終的に50種類以上の料理から1つをおすすめしてください。
-1問ごとに「はい」「いいえ」で答えられる質問を出し、料理が決まったら「あなたにおすすめの料理は〇〇です！」と表示してください。
-`
-      },
-      {
-        role: "assistant",
-        content: "第一問：温かい料理が食べたいですか？"
-      }
-    ];
-
-    document.getElementById("question").textContent = messages[messages.length - 1].content;
-
-    async function answer(userInput) {
-      messages.push({ role: "user", content: userInput });
-
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages })
-      });
-
-      const data = await res.json();
-      const reply = data.reply;
-      messages.push({ role: "assistant", content: reply });
-
-      if (reply.includes("おすすめの料理は")) {
-        document.getElementById("result").textContent = reply;
-        document.getElementById("question").textContent = "診断が完了しました！";
-      } else {
-        document.getElementById("question").textContent = reply;
-      }
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
